@@ -28,8 +28,8 @@ public class MainClass {
 
             try {
                 String line;
-                String oldIpdest = new String("0");
-                String oldPort =  new String("0");
+                //String oldIpdest = new String("0");
+                //String oldPort =  new String("0");
 
                 JSONArray arrayOfIpsrc = new JSONArray();
                 JSONArray arrayOfIpDst = new JSONArray();
@@ -38,39 +38,43 @@ public class MainClass {
                 line = buff.readLine();
 
                 String newIpsrc = findPositionSrc(line);
-                String newIpdest = findPositionDest(line);
-                String newPort = findPositionPort(line);
+                String oldIpdest = findPositionDest(line);
+                String oldPort = findPositionPort(line);
 
                 arrayOfIpsrc.add(createNewIpSrc(newIpsrc));
 
-                arrayOfDestPort.add(createPortDest(createNewPort(newPort), arrayOfIpsrc));
+                JSONObject objPort = createPortDest(createNewPort(oldPort), arrayOfIpsrc);
+                arrayOfDestPort.add(objPort);
 
-                arrayOfIpDst.add(createIpDest(createNewIpDest(newIpdest) ,arrayOfDestPort));
+                JSONObject objIpDst = createIpDest(createNewIpDest(oldIpdest) ,arrayOfDestPort);
+                arrayOfIpDst.add(objIpDst);
 
 
-               /*while ((line = buff.readLine()+1) != null) {
+               while ((line = buff.readLine()) != null) {
                     newIpsrc = findPositionSrc(line);
-                    newIpdest = findPositionDest(line);
-                    newPort = findPositionDest(line);
+                    String newIpdest = findPositionDest(line);
+                    String newPort = findPositionPort(line);
 
                     if(newIpdest.equals(oldIpdest)){
                         if(newPort.equals(oldPort)){
-                            arrayOfIpsrc = addIpSrc(arrayOfIpsrc, createNewIpSrc(newIpsrc));
+                            arrayOfIpsrc.add(createNewIpSrc(newIpsrc));
+                            //arrayOfDestPort.add(arrayOfIpsrc);
                         }else{
                             //JSONArray otherArrayOfDestPort = new JSONArray();
                             //JSONArray otherArrayOfIpsrc = new JSONArray();
-                            arrayOfIpsrc = addIpSrc(arrayOfIpsrc, createNewIpSrc(newIpsrc));
-                            arrayOfDestPort = addPort(arrayOfDestPort, createNewPort(newPort));
+                            arrayOfIpsrc.add(createNewIpSrc(newIpsrc));
+                            arrayOfDestPort.add(createPortDest(createNewPort(newPort), arrayOfIpsrc));
                         }
                     }else{
                         //JSONArray otherArrayOfIpsrc = new JSONArray();
-                        arrayOfIpDst = addIpDest(arrayOfIpDst, newIpdest);
-
+                        arrayOfIpDst.add(createIpDest(createNewIpDest(newIpdest) ,arrayOfDestPort));
                     }
+
+
 
                     oldIpdest = newIpdest;
                     oldPort = newPort;
-                }*/
+                }
                 try (FileWriter writer = new FileWriter(output)) {
 
                     writer.write(createFirstLine(arrayOfIpDst).toJSONString());
