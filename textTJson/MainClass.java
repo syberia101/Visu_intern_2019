@@ -26,19 +26,32 @@ public class MainClass {
             //Create CSVWriter object with outputFile as parameter
             //CSVWriter writer = new CSVWriter(tempFile);
 
-            JSONArray arrayOfIpsrc = new JSONArray();
-            JSONArray arrayOfIpDst = new JSONArray();
-            JSONArray arrayOfDestPort = new JSONArray();
-
             try {
                 String line;
                 String oldIpdest = new String("0");
                 String oldPort =  new String("0");
 
-                while ((line = buff.readLine()) != null) {
-                    String newIpsrc = findPositionSrc(line);
-                    String newIpdest = findPositionDest(line);
-                    String newPort = findPositionDest(line);
+                JSONArray arrayOfIpsrc = new JSONArray();
+                JSONArray arrayOfIpDst = new JSONArray();
+                JSONArray arrayOfDestPort = new JSONArray();
+
+                line = buff.readLine();
+
+                String newIpsrc = findPositionSrc(line);
+                String newIpdest = findPositionDest(line);
+                String newPort = findPositionPort(line);
+
+                arrayOfIpsrc.add(createNewIpSrc(newIpsrc));
+
+                arrayOfDestPort.add(createPortDest(createNewPort(newPort), arrayOfIpsrc));
+
+                arrayOfIpDst.add(createIpDest(createNewIpDest(newIpdest) ,arrayOfDestPort));
+
+
+               /*while ((line = buff.readLine()+1) != null) {
+                    newIpsrc = findPositionSrc(line);
+                    newIpdest = findPositionDest(line);
+                    newPort = findPositionDest(line);
 
                     if(newIpdest.equals(oldIpdest)){
                         if(newPort.equals(oldPort)){
@@ -57,10 +70,7 @@ public class MainClass {
 
                     oldIpdest = newIpdest;
                     oldPort = newPort;
-                }
-            }finally{
-                buff.close();
-
+                }*/
                 try (FileWriter writer = new FileWriter(output)) {
 
                     writer.write(createFirstLine(arrayOfIpDst).toJSONString());
@@ -69,6 +79,10 @@ public class MainClass {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }finally{
+                buff.close();
+
+
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -107,11 +121,11 @@ public class MainClass {
         return ipsrcUp;
     }
 
-    public static String createNewIpDest(String ipdst){
-        /*JSONObject ipdstUp = new JSONObject();
-        ipdstUp.put("ipdst", ipdst);*/
+    public static JSONObject createNewIpDest(String ipdst){
+        JSONObject ipdstUp = new JSONObject();
+        ipdstUp.put("ipdst", ipdst);
 
-        return ipdst;
+        return ipdstUp;
     }
 
     public static JSONObject createNewPort(String destPort){
@@ -122,7 +136,7 @@ public class MainClass {
     }
 
     ///////////////// Ajouter JSON Object a la liste /////////////////
-    public static JSONArray addIpSrc(JSONArray arrayOfIpsrc, JSONObject ipsrcUp){
+    /*public static JSONArray addIpSrc(JSONArray arrayOfIpsrc, JSONObject ipsrcUp){
         arrayOfIpsrc.add(ipsrcUp);
 
         return arrayOfIpsrc;
@@ -138,27 +152,26 @@ public class MainClass {
         arrayOfDestPort.add(destPortUp);
 
         return arrayOfDestPort;
-    }
+    }*/
 
     /////////////////// Creer surobjet ////////////////////
-    public static JSONObject createPortDest(String port, JSONArray arrayForPort){
-        JSONObject objPort = new JSONObject();
-        objPort.put("port", port);
-        objPort.put("children", arrayForPort);
+    public static JSONObject createPortDest(JSONObject port, JSONArray arrayForPort){
+        //JSONObject objPort = new JSONObject();
+        //port.put("port", port.get());
+        port.put("children", arrayForPort);
 
-        return objPort;
+        return port;
     }
 
-    public static JSONObject createIpDest(ArrayList arrayOfIpdst, JSONArray arrayForIpDst){
-        for(int i=1; i<arrayOfIpdst.size(); i++) {
-            String ipdst = new String(arrayOfIpdst.get(i).toString());
+    public static JSONObject createIpDest(JSONObject ipdest, JSONArray arrayForIpDst){
 
-            JSONObject objIpDst = new JSONObject();
-            objIpDst.put("ipdst", ipdst);
-            objIpDst.put("children", arrayForIpDst);
+            //String ipdst = new String(arrayOfIpdst.get(i).toString());
 
-            return objIpDst;
-        }
+            //JSONObject objIpDst = new JSONObject();
+            //objIpDst.put("ipdst", ipdest);
+            ipdest.put("children", arrayForIpDst);
+
+            return ipdest;
     }
 
     public static JSONObject createFirstLine(JSONArray arrayOfIpDst){
