@@ -1,4 +1,4 @@
-package Test1;
+package CsvToSimpleJsonFile;
 
 import java.io.File;
 import java.util.List;
@@ -8,7 +8,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvMapper;
 import com.fasterxml.jackson.dataformat.csv.CsvSchema;
 
-public class Principale1 {
+public class FirstMethod {
 
     public static void main(String[] args) throws Exception {
         File input = new File("C:\\Users\\c1972519\\Desktop\\data1.csv");

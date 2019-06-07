@@ -1,8 +1,5 @@
-package goodJSON;
+package CsvToSimpleJsonFile;
 
-/**
- * Created by c1972519 on 5/23/2019.
- */
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
@@ -17,33 +14,55 @@ import java.util.stream.Collectors;
 /**
  * Created by c1972519 on 5/16/2019.
  */
-public class Principale {
-/*
+public class SecondMethod {
+
     public static void main(String[] args) {
-        Pattern pattern = Pattern.compile(",");
+        Pattern pattern = Pattern.compile(","); //to parse the csv file
 
         File csvFile = new File("C:\\Users\\c1972519\\Desktop\\data1.csv");
 
         try (BufferedReader in = new BufferedReader(new FileReader(csvFile));) {
-
-            List<JavaObject> jsonfile = in
+            List<CsvToJava> jsonfile = in
                     .lines()
                     .skip(1)
                     .map(line -> {
                         String[] x = pattern.split(line);
-
-                        //if(strcmp(x[0], )){}
-                        return new JavaObject(x[0], x[1], x[2]);
+                        return new CsvToJava(x[0], x[1], x[2]);
                     })
                     .collect(Collectors.toList());
 
             ObjectMapper mapper = new ObjectMapper();
             mapper.enable(SerializationFeature.INDENT_OUTPUT);
-            mapper.writeValue(new File("C:\\Users\\c1972519\\Desktop\\goodData.json"), jsonfile);
+            mapper.writeValue(new File("C:\\Users\\c1972519\\Desktop\\data1.json"), jsonfile);
 
         } catch (IOException ex) {
             System.out.println("Please fill in a file !");
         }
     }
-    */
+
+    public static class CsvToJava{
+        private String ipdest;
+        private String port;
+        private String ipsrc;
+
+        public CsvToJava(String id, String p, String is){
+            this.ipdest = id;
+            this.port = p;
+            this.ipsrc = is;
+        }
+
+        public String getIpdest(){
+            return ipdest;
+        }
+
+        public String getPort(){
+            return port;
+        }
+
+        public String getIpsrc(){
+            return ipsrc;
+        }
+
+        //I didn't wrote the setters because I think we don't mind here
+    }
 }
